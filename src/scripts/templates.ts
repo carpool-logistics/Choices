@@ -7,9 +7,13 @@ import { Choice } from './interfaces/choice';
 import { Group } from './interfaces/group';
 import { Item } from './interfaces/item';
 import { PassedElementType } from './interfaces/passed-element-type';
+import { decodeHTMLSpecialCharacters } from './lib/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TemplateOptions = Record<'classNames' | 'allowHTML', any>;
+type TemplateOptions = Record<
+  'classNames' | 'allowHTML' | 'decodeHTMLSpecialChars',
+  any
+>;
 
 const templates = {
   containerOuter(
@@ -81,6 +85,7 @@ const templates = {
   item(
     {
       allowHTML,
+      decodeHTMLSpecialChars,
       classNames: {
         item,
         button,
@@ -103,7 +108,9 @@ const templates = {
   ): HTMLDivElement {
     const div = Object.assign(document.createElement('div'), {
       className: item,
-      [allowHTML ? 'innerHTML' : 'innerText']: label,
+      [allowHTML ? 'innerHTML' : 'innerText']: decodeHTMLSpecialChars
+        ? decodeHTMLSpecialCharacters(label)
+        : label,
     });
 
     Object.assign(div.dataset, {
@@ -202,6 +209,7 @@ const templates = {
   choice(
     {
       allowHTML,
+      decodeHTMLSpecialChars,
       classNames: {
         item,
         itemChoice,
@@ -225,7 +233,9 @@ const templates = {
   ): HTMLDivElement {
     const div = Object.assign(document.createElement('div'), {
       id: elementId,
-      [allowHTML ? 'innerHTML' : 'innerText']: label,
+      [allowHTML ? 'innerHTML' : 'innerText']: decodeHTMLSpecialChars
+        ? decodeHTMLSpecialCharacters(label)
+        : label,
       className: `${item} ${itemChoice}`,
     });
 

@@ -160,6 +160,16 @@ export interface Options {
      */
     allowHTML: boolean;
     /**
+     * Whether HTML special chars (like &amp;) should be decoded in all Choices elements labels.
+     * If `false`, all elements labels will be displayed unchanged - depending on your allowHTML setting they will be displayed differently.
+     * If `true`, all elements labels will be decoded before they are displayed.
+     *
+     * **Input types affected:** text, select-one, select-multiple
+     *
+     * @default true
+     */
+    decodeHTMLSpecialChars: boolean;
+    /**
      * Whether each inputted/chosen item should be unique.
      *
      * **Input types affected:** text, select-multiple

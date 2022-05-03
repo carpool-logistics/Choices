@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Ignore these -->
+  <link rel="stylesheet" href="../../assets/styles/base.min.css" />
+  <!-- End ignore these -->
+
+  <!-- Choices includes -->
+  <link rel="stylesheet" href="../../assets/styles/choices.min.css" />
+  <script src="../../assets/scripts/choices.min.js"></script>
+  <!-- End Choices includes -->
+</head>
+<body>
+<div class="container">
+  <div class="section">
+    <label>Choices with allowHTML = false, decodeHTMLSpecialChars = false</label>
+    <select name="test3" id="test3">
+      <option value="1">Option A&amp;1<strong>XX</strong></option>
+      <option value="1">Option A&1</option>
+      <option value="2">Option B &lt; X</option>
+      <option value="2">Option B < X</option>
+
+    </select>
+
+    <label>Choices with allowHTML = false, decodeHTMLSpecialChars = true</label>
+    <select name="test1" id="test1">
+      <option value="1">Option A&amp;1<strong>XX</strong></option>
+      <option value="1">Option A&1</option>
+      <option value="2">Option B &lt; X</option>
+      <option value="2">Option B < X</option>
+
+    </select>
+
+    <label>Choices with allowHTML = true, decodeHTMLSpecialChars = false</label>
+    <select name="test2" id="test2">
+      <option value="1">Option A&amp;1<strong>XX</strong></option>
+      <option value="1">Option A&1</option>
+      <option value="2">Option B &lt; X</option>
+      <option value="2">Option B < X</option>
+    </select>
+
+
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  (function() {
+    const test3Select = document.getElementById('test3');
+    const choices3 = new Choices(test3Select, {allowHTML: false, decodeHTMLSpecialChars: false, });
+
+    const test1Select = document.getElementById('test1');
+    const choices1 = new Choices(test1Select, {allowHTML: false, decodeHTMLSpecialChars: true, });
+
+    const test2Select = document.getElementById('test2', {allowHTML: true, decodeHTMLSpecialChars: false});
+    const choices2 = new Choices(test2Select);
+
+  })();
+</script>
+
+</body>
+</html>

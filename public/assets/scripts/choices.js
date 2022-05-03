@@ -397,7 +397,9 @@ function () {
           value: option.value,
           label: option.innerHTML,
           selected: !!option.selected,
-          disabled: option.disabled || option.parentNode.disabled,
+          disabled: option.disabled
+          /* || option.parentNode.disabled */
+          ,
           placeholder: option.value === '' || option.hasAttribute('placeholder'),
           customProperties: option.dataset['custom-properties']
         });
@@ -3477,6 +3479,7 @@ exports.DEFAULT_CONFIG = {
   removeItemButton: false,
   editItems: false,
   allowHTML: true,
+  decodeHTMLSpecialChars: true,
   duplicateItemsAllowed: true,
   delimiter: ',',
   paste: true,
@@ -3756,7 +3759,7 @@ Object.defineProperty(exports, "__esModule", ({
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.diff = exports.cloneObject = exports.existsInArray = exports.dispatchEvent = exports.sortByScore = exports.sortByAlpha = exports.strToEl = exports.sanitise = exports.isScrolledIntoView = exports.getAdjacentEl = exports.wrap = exports.isType = exports.getType = exports.generateId = exports.generateChars = exports.getRandomNumber = void 0;
+exports.decodeHTMLSpecialCharacters = exports.diff = exports.cloneObject = exports.existsInArray = exports.dispatchEvent = exports.sortByScore = exports.sortByAlpha = exports.strToEl = exports.sanitise = exports.isScrolledIntoView = exports.getAdjacentEl = exports.wrap = exports.isType = exports.getType = exports.generateId = exports.generateChars = exports.getRandomNumber = void 0;
 
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -3958,6 +3961,27 @@ var diff = function (a, b) {
 };
 
 exports.diff = diff;
+
+var decodeHTMLSpecialCharacters = function (text) {
+  var map = {
+    '&amp;': '&',
+    '&#038;': '&',
+    '&lt;': '<',
+    '&#060;': '<',
+    '&gt;': '>',
+    '&#062;': '>',
+    '&quot;': '"',
+    '&#034;': '"',
+    '&apos;': "'",
+    '&#039;': "'"
+  };
+  var searchValue = new RegExp(Object.keys(map).join('|'), 'g');
+  return text.replace(searchValue, function (m) {
+    return map[m];
+  });
+};
+
+exports.decodeHTMLSpecialCharacters = decodeHTMLSpecialCharacters;
 
 /***/ }),
 
@@ -4575,7 +4599,7 @@ exports["default"] = Store;
 /***/ }),
 
 /***/ 686:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 /**
@@ -4586,6 +4610,9 @@ exports["default"] = Store;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+
+var utils_1 = __webpack_require__(799);
+
 var templates = {
   containerOuter: function (_a, dir, isSelectElement, isSelectOneElement, searchEnabled, passedElementType, labelId) {
     var containerOuter = _a.classNames.containerOuter;
@@ -4647,6 +4674,7 @@ var templates = {
     var _c, _d;
 
     var allowHTML = _a.allowHTML,
+        decodeHTMLSpecialChars = _a.decodeHTMLSpecialChars,
         _e = _a.classNames,
         item = _e.item,
         button = _e.button,
@@ -4663,7 +4691,7 @@ var templates = {
         isPlaceholder = _b.placeholder;
     var div = Object.assign(document.createElement('div'), (_c = {
       className: item
-    }, _c[allowHTML ? 'innerHTML' : 'innerText'] = label, _c));
+    }, _c[allowHTML ? 'innerHTML' : 'innerText'] = decodeHTMLSpecialChars ? (0, utils_1.decodeHTMLSpecialCharacters)(label) : label, _c));
     Object.assign(div.dataset, {
       item: '',
       id: id,
@@ -4752,6 +4780,7 @@ var templates = {
     var _c;
 
     var allowHTML = _a.allowHTML,
+        decodeHTMLSpecialChars = _a.decodeHTMLSpecialChars,
         _d = _a.classNames,
         item = _d.item,
         itemChoice = _d.itemChoice,
@@ -4769,7 +4798,7 @@ var templates = {
         isPlaceholder = _b.placeholder;
     var div = Object.assign(document.createElement('div'), (_c = {
       id: elementId
-    }, _c[allowHTML ? 'innerHTML' : 'innerText'] = label, _c.className = "".concat(item, " ").concat(itemChoice), _c));
+    }, _c[allowHTML ? 'innerHTML' : 'innerText'] = decodeHTMLSpecialChars ? (0, utils_1.decodeHTMLSpecialCharacters)(label) : label, _c.className = "".concat(item, " ").concat(itemChoice), _c));
 
     if (isSelected) {
       div.classList.add(selectedState);

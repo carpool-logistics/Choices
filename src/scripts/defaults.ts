@@ -43,6 +43,7 @@ export const DEFAULT_CONFIG: Options = {
   removeItemButton: false,
   editItems: false,
   allowHTML: true,
+  decodeHTMLSpecialChars: true,
   duplicateItemsAllowed: true,
   delimiter: ',',
   paste: true,
