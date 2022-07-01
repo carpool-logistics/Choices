@@ -180,3 +180,24 @@ export const diff = (
 
   return aKeys.filter((i) => bKeys.indexOf(i) < 0);
 };
+
+export const decodeHTMLSpecialCharacters = (text: string): string => {
+  const map = {
+    '&amp;': '&',
+    '&#038;': '&',
+    '&lt;': '<',
+    '&#060;': '<',
+    '&gt;': '>',
+    '&#062;': '>',
+    '&quot;': '"',
+    '&#034;': '"',
+    '&apos;': "'",
+    '&#039;': "'",
+  };
+
+  const searchValue = new RegExp(Object.keys(map).join('|'), 'g');
+
+  return text.replace(searchValue, (m: string): string => {
+    return map[m];
+  });
+};
