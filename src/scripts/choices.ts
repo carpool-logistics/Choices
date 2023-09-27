@@ -385,7 +385,7 @@ class Choices implements Choices {
       this.passedElement.enable();
     }
 
-    if (this.containerOuter.isDisabled) {
+    if (this.containerOuter && this.containerOuter.isDisabled) {
       this._addEventListeners();
       this.input.enable();
       this.containerOuter.enable();
@@ -698,7 +698,9 @@ class Choices implements Choices {
       );
     }
 
-    this.containerOuter.removeLoadingState();
+    if (this.containerOuter) {
+      this.containerOuter.removeLoadingState();
+    }
 
     this._startLoading();
 
