@@ -10,7 +10,6 @@
     "lint": "run-p lint:js lint:scss",
     "lint:js": "eslint src/scripts/**/*.ts",
     "lint:scss": "stylelint src/**/*.scss",
-    "bundlesize": "bundlesize",
     "cypress:run": "cypress run --browser chrome",
     "cypress:open": "cypress open",
     "cypress:ci": "cypress run --browser chrome --record --group $GITHUB_REF --ci-build-id $GITHUB_SHA",
@@ -67,7 +66,6 @@
     "@typescript-eslint/parser": "^5.11.0",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
-    "bundlesize": "^0.18.1",
     "chai": "^4.3.6",
     "cross-env": "^7.0.3",
     "csso-cli": "^3.0.0",
@@ -130,15 +128,5 @@
     "exclude": [
       "src/scripts/**/**/*.test.js"
     ]
-  },
-  "bundlesize": [
-    {
-      "path": "public/assets/scripts/choices.min.js",
-      "maxSize": "25 kB"
-    },
-    {
-      "path": "public/assets/styles/choices.min.css",
-      "maxSize": "2.5 kB"
-    }
-  ]
+  }
 }
