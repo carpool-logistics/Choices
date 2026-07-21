@@ -607,6 +607,12 @@ describe('choices', () => {
           expect(output).to.deep.equal(instance);
         });
 
+        it('focuses input synchronously when input focus is allowed', () => {
+          instance.showDropdown(false);
+
+          expect(inputFocusSpy).toHaveBeenCalledOnce();
+        });
+
         it('opens containerOuter', () =>
           new Promise((done) => {
             requestAnimationFrame(() => {

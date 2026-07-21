@@ -511,14 +511,14 @@ class Choices {
       preventInputFocus = !this._canSearch;
     }
 
+    if (!preventInputFocus) {
+      this.input.focus();
+    }
+
     requestAnimationFrame(() => {
       this.dropdown.show();
       const rect = this.dropdown.element.getBoundingClientRect();
       this.containerOuter.open(rect.bottom, rect.height);
-
-      if (!preventInputFocus) {
-        this.input.focus();
-      }
 
       this.passedElement.triggerEvent(EventType.showDropdown);
 
