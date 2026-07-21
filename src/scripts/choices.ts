@@ -1442,11 +1442,6 @@ class Choices {
     let canAddItem = true;
     let notice = '';
 
-    if (canAddItem && typeof config.addItemFilter === 'function' && !config.addItemFilter(value)) {
-      canAddItem = false;
-      notice = resolveNoticeFunction(config.customAddItemText, value, undefined);
-    }
-
     if (canAddItem) {
       const foundChoice = this._store.choices.find((choice) => config.valueComparer(choice.value, value));
       if (foundChoice) {
@@ -1461,6 +1456,11 @@ class Choices {
           notice = resolveNoticeFunction(config.uniqueItemText, value, undefined);
         }
       }
+    }
+
+    if (canAddItem && typeof config.addItemFilter === 'function' && !config.addItemFilter(value)) {
+      canAddItem = false;
+      notice = resolveNoticeFunction(config.customAddItemText, value, undefined);
     }
 
     if (canAddItem) {
