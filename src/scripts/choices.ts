@@ -673,20 +673,22 @@ class Choices {
    * }], 'value', 'label', false);
    * ```
    */
-  setChoices(
-    choicesArrayOrFetcher:
+  setChoices<
+    T extends
       | (InputChoice | InputGroup)[]
-      | ((instance: Choices) => (InputChoice | InputGroup)[] | Promise<(InputChoice | InputGroup)[]>) = [],
+      | ((instance: Choices) => (InputChoice | InputGroup)[] | Promise<(InputChoice | InputGroup)[]>),
+  >(
+    choicesArrayOrFetcher: T,
     value: string | null = 'value',
     label: string = 'label',
     replaceChoices: boolean = false,
     clearSearchFlag: boolean = true,
     replaceItems: boolean = false,
-  ): this | Promise<this> {
+  ): T extends (InputChoice | InputGroup)[] ? this : Promise<this> {
     if (!this.initialisedOK) {
       this._warnChoicesInitFailed('setChoices');
 
-      return this;
+      return this as unknown as never;
     }
     if (!this._isSelectElement) {
       throw new TypeError(`setChoices can't be used with INPUT based Choices`);
@@ -701,7 +703,7 @@ class Choices {
       const fetcher = choicesArrayOrFetcher(this);
 
       if (typeof Promise === 'function' && fetcher instanceof Promise) {
-        // that's a promise
+        // @ts-expect-error wonky typing
         // eslint-disable-next-line no-promise-executor-return
         return new Promise((resolve) => requestAnimationFrame(resolve))
           .then(() => this._handleLoadingState(true))
@@ -725,6 +727,7 @@ class Choices {
         );
       }
 
+      // @ts-expect-error wonky typing
       // eslint-disable-next-line no-param-reassign
       choicesArrayOrFetcher = fetcher;
     }
@@ -786,6 +789,7 @@ class Choices {
     // @todo integrate with Store
     this._searcher.reset();
 
+    // @ts-expect-error wonky typing
     return this;
   }
 
