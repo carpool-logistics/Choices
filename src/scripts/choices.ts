@@ -406,7 +406,7 @@ class Choices {
     return this;
   }
 
-  highlightItem(item: InputChoice, runEvent = true): this {
+  highlightItem(item: InputChoice | null, runEvent = true): this {
     if (!item || !item.id) {
       return this;
     }
@@ -424,7 +424,7 @@ class Choices {
     return this;
   }
 
-  unhighlightItem(item: InputChoice, runEvent = true): this {
+  unhighlightItem(item: InputChoice | null, runEvent = true): this {
     if (!item || !item.id) {
       return this;
     }
