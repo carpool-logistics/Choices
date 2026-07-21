@@ -67,8 +67,8 @@ declare class Choices {
     destroy(): void;
     enable(): this;
     disable(): this;
-    highlightItem(item: InputChoice, runEvent?: boolean): this;
-    unhighlightItem(item: InputChoice, runEvent?: boolean): this;
+    highlightItem(item: InputChoice | null, runEvent?: boolean): this;
+    unhighlightItem(item: InputChoice | null, runEvent?: boolean): this;
     highlightAll(): this;
     unhighlightAll(): this;
     removeActiveItemsByValue(value: string): this;
