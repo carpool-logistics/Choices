@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from 'vitest';
 // eslint-disable-next-line import/no-named-default
 import { default as _templates } from '../../src/scripts/templates';
 import { strToEl, getClassNames } from '../../src/scripts/lib/utils';
