@@ -608,6 +608,7 @@ describe('choices', () => {
         });
 
         it('focuses input synchronously when input focus is allowed', () => {
+          instance.dropdown.isActive = false;
           instance.showDropdown(false);
 
           expect(inputFocusSpy).toHaveBeenCalledOnce();

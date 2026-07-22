@@ -511,12 +511,13 @@ class Choices {
       preventInputFocus = !this._canSearch;
     }
 
+    this.dropdown.show();
+
     if (!preventInputFocus) {
       this.input.focus();
     }
 
     requestAnimationFrame(() => {
-      this.dropdown.show();
       const rect = this.dropdown.element.getBoundingClientRect();
       this.containerOuter.open(rect.bottom, rect.height);
 
@@ -1967,8 +1968,8 @@ class Choices {
             this.input.focus();
           }
         } else {
-          this.showDropdown();
           containerOuter.element.focus();
+          this.showDropdown();
         }
       } else if (
         this._isSelectOneElement &&
