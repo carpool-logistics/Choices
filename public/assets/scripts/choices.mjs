@@ -2185,7 +2185,7 @@ class BaseMatch {
   static isSingleMatch(pattern) {
     return getMatch(pattern, this.singleRegex);
   }
-  search( /*text*/) {}
+  search(/*text*/) {}
 }
 function getMatch(pattern, exp) {
   const matches = pattern.match(exp);
@@ -2764,7 +2764,7 @@ class Fuse {
     this._docs.push(doc);
     this._myIndex.add(doc);
   }
-  remove(predicate = ( /* doc, idx */) => false) {
+  remove(predicate = (/* doc, idx */) => false) {
     const results = [];
     for (let i = 0, len = this._docs.length; i < len; i += 1) {
       const doc = this._docs[i];
@@ -3691,13 +3691,13 @@ var Choices = /** @class */ (function () {
             // eslint-disable-next-line no-param-reassign
             preventInputFocus = !this._canSearch;
         }
+        this.dropdown.show();
+        if (!preventInputFocus) {
+            this.input.focus();
+        }
         requestAnimationFrame(function () {
-            _this.dropdown.show();
             var rect = _this.dropdown.element.getBoundingClientRect();
             _this.containerOuter.open(rect.bottom, rect.height);
-            if (!preventInputFocus) {
-                _this.input.focus();
-            }
             _this.passedElement.triggerEvent(EventType.showDropdown);
             var activeElement = _this.choiceList.element.querySelector(getClassNamesSelector(_this.config.classNames.selectedState));
             if (activeElement !== null && !isScrolledIntoView(activeElement, _this.choiceList.element)) {
@@ -3832,7 +3832,6 @@ var Choices = /** @class */ (function () {
      */
     Choices.prototype.setChoices = function (choicesArrayOrFetcher, value, label, replaceChoices, clearSearchFlag, replaceItems) {
         var _this = this;
-        if (choicesArrayOrFetcher === void 0) { choicesArrayOrFetcher = []; }
         if (value === void 0) { value = 'value'; }
         if (label === void 0) { label = 'label'; }
         if (replaceChoices === void 0) { replaceChoices = false; }
@@ -3852,7 +3851,7 @@ var Choices = /** @class */ (function () {
             // it's a choices fetcher function
             var fetcher_1 = choicesArrayOrFetcher(this);
             if (typeof Promise === 'function' && fetcher_1 instanceof Promise) {
-                // that's a promise
+                // @ts-expect-error wonky typing
                 // eslint-disable-next-line no-promise-executor-return
                 return new Promise(function (resolve) { return requestAnimationFrame(resolve); })
                     .then(function () { return _this._handleLoadingState(true); })
@@ -3872,6 +3871,7 @@ var Choices = /** @class */ (function () {
             if (!Array.isArray(fetcher_1)) {
                 throw new TypeError(".setChoices first argument function must return either array of choices or Promise, got: ".concat(typeof fetcher_1));
             }
+            // @ts-expect-error wonky typing
             // eslint-disable-next-line no-param-reassign
             choicesArrayOrFetcher = fetcher_1;
         }
@@ -3917,6 +3917,7 @@ var Choices = /** @class */ (function () {
         }
         // @todo integrate with Store
         this._searcher.reset();
+        // @ts-expect-error wonky typing
         return this;
     };
     Choices.prototype.refresh = function (withEvents, selectFirstOption, deselectAll) {
@@ -4479,10 +4480,6 @@ var Choices = /** @class */ (function () {
         var config = this.config;
         var canAddItem = true;
         var notice = '';
-        if (canAddItem && typeof config.addItemFilter === 'function' && !config.addItemFilter(value)) {
-            canAddItem = false;
-            notice = resolveNoticeFunction(config.customAddItemText, value, undefined);
-        }
         if (canAddItem) {
             var foundChoice = this._store.choices.find(function (choice) { return config.valueComparer(choice.value, value); });
             if (foundChoice) {
@@ -4496,6 +4493,10 @@ var Choices = /** @class */ (function () {
                     notice = resolveNoticeFunction(config.uniqueItemText, value, undefined);
                 }
             }
+        }
+        if (canAddItem && typeof config.addItemFilter === 'function' && !config.addItemFilter(value)) {
+            canAddItem = false;
+            notice = resolveNoticeFunction(config.customAddItemText, value, undefined);
         }
         if (canAddItem) {
             notice = resolveNoticeFunction(config.addItemText, value, undefined);
@@ -4921,8 +4922,8 @@ var Choices = /** @class */ (function () {
                     }
                 }
                 else {
-                    this.showDropdown();
                     containerOuter.element.focus();
+                    this.showDropdown();
                 }
             }
             else if (this._isSelectOneElement &&
