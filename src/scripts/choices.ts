@@ -1850,11 +1850,9 @@ class Choices {
           nextEl = this.dropdown.element.querySelector(selectableChoiceIdentifier);
         }
       } else {
-        const currentEl =
-          this.dropdown.element.querySelector<HTMLElement>(
-            getClassNamesSelector(this.config.classNames.highlightedState),
-          ) ??
-          this.dropdown.element.querySelector<HTMLElement>(getClassNamesSelector(this.config.classNames.selectedState));
+        const currentEl: HTMLElement | null =
+          this.dropdown.element.querySelector(getClassNamesSelector(this.config.classNames.highlightedState)) ||
+          this.dropdown.element.querySelector(getClassNamesSelector(this.config.classNames.selectedState));
         if (currentEl) {
           nextEl = getAdjacentEl(currentEl, selectableChoiceIdentifier, directionInt);
         } else {
