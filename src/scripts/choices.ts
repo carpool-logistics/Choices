@@ -511,16 +511,16 @@ class Choices {
       preventInputFocus = !this._canSearch;
     }
 
+    // to ensure a virtual keyboard trigger as expected, the focus/animation must be started from the input event and not an animation frame which
     this.dropdown.show();
+    const rect = this.dropdown.element.getBoundingClientRect();
+    this.containerOuter.open(rect.bottom, rect.height);
 
     if (!preventInputFocus) {
       this.input.focus();
     }
 
     requestAnimationFrame(() => {
-      const rect = this.dropdown.element.getBoundingClientRect();
-      this.containerOuter.open(rect.bottom, rect.height);
-
       this.passedElement.triggerEvent(EventType.showDropdown);
 
       const activeElement = this.choiceList.element.querySelector<HTMLElement>(

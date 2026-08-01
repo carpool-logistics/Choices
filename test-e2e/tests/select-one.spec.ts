@@ -49,7 +49,7 @@ describe(`Choices - select one`, () => {
               };
             });
 
-            expect(beforeFrame).toEqual({ inputFocused: true, containerExpanded: 'false' });
+            expect(beforeFrame).toEqual({ inputFocused: true, containerExpanded: 'true' });
             await expect(suite.dropdown).toBeVisible();
             await suite.advanceClock();
             await expect(suite.wrapper).toHaveAttribute('aria-expanded', 'true');
