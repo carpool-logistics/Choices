@@ -2283,7 +2283,7 @@ class Choices {
     });
 
     this.dropdown = new Dropdown({
-      element: templating.dropdown(config),
+      element: templating.dropdown(config, elementType),
       classNames,
       type: elementType,
     });
