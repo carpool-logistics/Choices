@@ -58,6 +58,11 @@ jobs:
         env:
           HUSKY_SKIP_INSTALL: true
 
+      # Dependency lifecycle scripts are disabled repo-wide (.npmrc: ignore-scripts),
+      # so Cypress's postinstall no longer downloads the runner binary.
+      - name: Install Cypress binary
+        run: npx cypress install
+
       - name: run Cypress (with or without recording)
         # if we have ran out of free Cypress recordings, run Cypress with recording switched off
         run: npx run-p --race start cypress:ci || npx run-p --race start cypress:run
