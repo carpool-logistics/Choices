@@ -163,6 +163,35 @@ predates Apple Silicon support. If the e2e job fails after this, a Cypress upgra
 the likely next step and belongs in its own change.
 
 
+### `browsers.yml` — quarantined
+
+Bumping the actions above made this workflow eligible to run for the first time in
+years (its `paths:` filter includes its own file), surfacing two further breaks:
+
+- **`TypeError: pixelmatch is not a function`.** The job installs `pixelmatch`
+  unpinned and outside `package-lock.json`, so it floated to v7.2.0. pixelmatch v6+ is
+  ESM-only while `actions-scripts/*.js` use `require()`, which on Node 24 yields the
+  module namespace object rather than the function. Reproduced locally: unpinned →
+  `typeof object`; `pixelmatch@^5.3.0` → `typeof function`. Now pinned to the last
+  CommonJS major.
+- **`Could not find Chrome`.** A regression from `ignore-scripts=true` — Puppeteer's
+  postinstall downloads the browser. Same class as the Cypress case, missed initially
+  because Puppeteer is installed ad-hoc in this workflow rather than via
+  `package.json`. Fixed with an explicit `npx puppeteer browsers install chrome`.
+
+Both jobs are now `continue-on-error: true`. The `__snapshots__` PNG baselines were
+last regenerated 2022-02-13 (7c360b4) and the scripts fail at `pixelDifference > 200`,
+so current browsers (Chrome 152 at time of writing) will drift past the threshold
+regardless of the fixes above. `selenium-webdriver` is likewise installed unpinned
+against 2022-era API usage. The matrix therefore still runs and reports, but cannot
+block merges until someone regenerates the baselines — upstream-flavoured work that
+does not belong in a security remediation.
+
+**Supply-chain note:** the ad-hoc `npm i` steps in this workflow bypass
+`package-lock.json` entirely — no pinning, no integrity checking. That is the same
+family as finding 3 and worth closing separately.
+
+
 ## Noted, not remediated
 
 Out of scope for these three findings; recorded so they are tracked rather than
