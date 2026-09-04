@@ -124,6 +124,45 @@ path in TMS runs no build script and uses the committed
 
 ---
 
+## CI toolchain remediation
+
+Not an Oneleet finding, but required to land the above: the first PR run failed at
+workflow setup with
+
+```
+Error: This request has been automatically failed because it uses a deprecated
+version of `actions/cache: v2`.
+```
+
+GitHub hard-fails the retired cache and artifact actions, so the job never reached a
+step. Fixed in the same change, along with the EOL toolchain behind it:
+
+| item | was | now | why |
+| --- | --- | --- | --- |
+| `actions/cache` | v2 | v4 | hard-failed by GitHub |
+| `actions/upload-artifact` | v2 | v4 | same shutdown; `browsers.yml` |
+| `::set-output` | deprecated | `$GITHUB_OUTPUT` | feeds the Cypress cache path |
+| `actions/checkout` | v2 | v4 | EOL runtime |
+| `actions/setup-node` | v2 | v4 | EOL runtime |
+| Node | 12 | 24 | see below |
+
+The Node bump was **not** cosmetic. `package-lock.json` is `lockfileVersion: 3`, which
+npm 7+ writes without the back-compat top-level `dependencies` key (confirmed absent).
+Node 12 ships npm 6, which reads only that key — so `npm ci` could not have installed
+this lockfile. The lockfile was regenerated in f7ccc68 ("unblock Node 20+/24") but the
+workflows were never moved, leaving CI unable to install. Node 24 matches that commit's
+stated target.
+
+Verified locally on modern Node before bumping: `npm ci` resolves 1127 packages and the
+full unit suite passes (377 tests, exit 0). The Cypress binary cache stayed empty,
+confirming `ignore-scripts` works end to end.
+
+Still unverified: Cypress 9.4.1 (Feb 2022) has not been exercised on Node 24, and could
+not be meaningfully tested on the darwin/arm64 machine used for this work — Cypress 9
+predates Apple Silicon support. If the e2e job fails after this, a Cypress upgrade is
+the likely next step and belongs in its own change.
+
+
 ## Noted, not remediated
 
 Out of scope for these three findings; recorded so they are tracked rather than
@@ -138,8 +177,6 @@ silently carried.
    a commit SHA would remove the vector; deferred because it is a functional change to
    a secret-bearing step that cannot be verified outside CI, and its failure is
    currently masked by `|| echo 'Codecov upload failed'`.
-2. **Actions pinned to mutable tags** (`actions/checkout@v2`, `actions/cache@v2`,
+2. **Actions pinned to mutable tags** (`actions/checkout@v4`, `actions/cache@v4`,
    `peaceiris/actions-gh-pages@v3`, `release-drafter/release-drafter@v5`). A tag can be
-   repointed by the action owner. SHA pinning is the hardening step.
-3. **Node 12 / `@v2` actions are EOL**, both in `.nvmrc` and every workflow. No longer
-   receiving security patches.
+   repointed by the action owner. SHA pinning is the remaining hardening step.
